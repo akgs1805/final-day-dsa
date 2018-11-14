@@ -1,0 +1,248 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <malloc.h>
+struct Customer
+{
+    char customername[20];
+    int  customerid;
+    int  customerage;
+    char customergender[20];
+    double  customerphonenumber;
+    char customeraddress[40];
+    float customercredit;
+    float customerdebit;
+    float customerbalance;
+    double date;
+    struct Customer *link;
+};
+typedef struct Customer *CUSTOMER;
+
+CUSTOMER insertcustomer(CUSTOMER cd)
+{
+        CUSTOMER temp=NULL,current=NULL;
+        temp=(CUSTOMER*)malloc(sizeof(CUSTOMER));
+                if(temp!=NULL)
+                {
+                        printf("1.Please Enter Your name\n");
+                        scanf("%s",temp->customername);
+                        printf("2.Please Enter Your Id\n");
+                        scanf("%s",temp->customername);
+                        printf("2.Please Enter Your Id\n");
+                        scanf("%d",&temp->customerid);
+                        printf("3.Please Enter Your Age\n");
+                        scanf("%d",&temp->customerage);
+                        printf("4.Please Enter Your Gender\n");
+                        scanf("%s",temp->customergender);
+                        printf("5.Please Enter Your Phone number\n");
+                        scanf("%lf",&temp->customerphonenumber);
+                        printf("6.Please Enter Your Address\n");
+                        scanf("%s",temp->customeraddress);
+                        temp->link=NULL;
+                        if(cd==NULL)
+                        {
+                                return temp;
+                        }
+                        else
+                        {
+                                current=cd;
+                                while(current->link!=NULL)
+                                current=current->link;
+                                current->link=temp;
+                                return cd;
+                        }
+                }
+                else
+                {
+                        printf("\n INSUFFIENT MEMORY");
+                        exit(0);
+                }//End of Function Insert.
+}
+
+void creditmanagement(CUSTOMER cd,double amount)
+{
+    double date;
+    int i;
+    printf("\n<><><><><><>CREDIT MANAGEMENT<><><><><><>\n");
+    printf("1.Please Enter The DATE of Transaction\n");
+    scanf("%lf",&date);
+    printf("2.Enter The Customer id\n");
+    scanf("%d",&i);
+    if(cd==NULL)
+    {
+        printf("SORRY!!!! NO CUSTOMERS IN THE TRANSACTION LIST\n");
+    }
+    else
+    {
+        
+        int found=0;
+        while(cd!=NULL)
+        {
+            if(i==cd->customerid)
+            {
+                found=1;
+                break;
+            }
+            else
+              cd=cd->link;
+        }
+        cd->customercredit=amount;
+        if(found!=0)
+        {
+            printf("\n %lf AMOUNT IS ENTERED,\n THANKS FOR THE TRANSACTION!!!!\n<><><><><><><><><><><><><><><><><><><><><><>",amount);
+        }
+        else
+        {
+            printf("\n CUSTOMER NOT FOUND");
+        }
+    }
+}    
+
+
+void debitmanagement(CUSTOMER cd,double amount)
+{
+    float date;
+    int id;
+    printf("\n<><><><><><>DEBIT MANAGEMENT<><><><><><>\n");
+    printf("Please Enter The DATE of payment\n");
+    scanf("%f",&date);
+    printf("Enter The Customer id: ");
+    scanf("%d",&id);
+    if(cd==NULL)
+    {
+        printf("NO CUSTOMERS IN THE TRANSACTION LIST\n");
+  }
+    else
+    {
+        int found=0;
+        while(cd!=NULL)
+        {
+            if(id==cd->customerid)
+            {
+                found=1;
+                break;
+            }
+         else
+            cd=cd->link;
+        }
+        cd->customerdebit=amount;
+        cd->customerbalance=cd->customercredit - cd->customerdebit;
+
+        if(found!=0)
+        {
+            printf("\n %lfAMOUNT IS PAYED,\n THANKS FOR THE PAYMENT !!!!\n",amount);
+                
+        }
+        else
+        {
+            printf("\n CUSTOMER NOT FOUND");
+        }
+    }
+
+void displaycustomerdetails(CUSTOMER cd)
+{    
+    if(cd==NULL)
+    {
+        printf("\nCUSTOMER LIST IS EMPTY");
+    }
+    else
+    {
+        printf("$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>");
+        printf("\n SUPER MARKET CUSTOMER MANAGEMENT SYSTEM \n");
+        printf("$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>");
+        CUSTOMER point=NULL;
+        point=cd;
+        while(point!=NULL)
+        {
+            printf("\nNAME OF CUSTOMER:");
+            printf("%s",point->customername);
+            printf("\nCUSTOMER ID:");
+            printf("%d",point->customerid);
+            printf("\nCUSTOMER AGE:");
+            printf("%d",point->customerage);
+            printf("\nCUSTOMER GENDER:");
+            printf("%s",point->customergender);
+            printf("\nPHONE NUMBER:");
+            printf("%lf",point->customerphonenumber);
+            printf("\nADDRESS:");
+            printf("%s",point->customeraddress);
+            point=point->link;
+            printf("\n$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>");
+        }
+    }
+}
+
+void displaytransactiondetails(CUSTOMER cd)
+{
+    int k;
+    if(cd==NULL)
+    {
+        printf("\nCUSTOMER LIST IS EMPTY");
+    }
+    else
+    {
+        CUSTOMER point=NULL;
+        point=cd;
+        printf("$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>\n");
+        printf("|S.NO|\t|ID|\t|CREDIT|\t\t|DEBIT|\t\t\t|BALANCE|\t\n");
+        while(point!=NULL)
+        {
+            printf("|%d|\t|%d|\t|%lf|\t\t|%lf|\t\t|%lf|\t\n\n",k,point->customerid,point->customercredit,point->customerdebit,point->customerbalance);
+            point=point->link;
+             k++;
+        }
+       printf("$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>\n");
+    }
+
+}
+
+int main()
+{
+
+     CUSTOMER cd=NULL;
+        int choice,element,id;
+        double amount;
+        while(1)
+        {
+                printf("$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>\n");
+                printf("\n Super Market Customer Management System\n");
+                printf("\n 1) Insert customer \n 2) Display the customer details \n 3)Credit management\n 4)Debit management \n 5)Display Transaction$
+                printf("ENTER YOUR CHOICE\n");
+                scanf("%d",&choice);
+                printf("$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>$<>\n");
+                switch(choice)
+                {
+                    case 1: 
+                        printf("WELCOME CUSTOMER!!!\n PLEASE ENTER YOUR DETAILS\n");
+                        cd=insertcustomer(cd);
+                        break;
+                    case 2:
+                        displaycustomerdetails(cd);
+                        break;
+                    case 3:
+                        printf("Enter The Amount\n");
+                        scanf("%lf",&amount);
+                        creditmanagement(cd,amount);
+                        break;
+                    case 4:
+                        printf("Enter The Amount\n");
+                        scanf("%lf",&amount);
+                        debitmanagement(cd,amount);
+                        break;
+                    case 5:
+                        displaytransactiondetails(cd);
+                        break;
+                    case 6:
+                        printf("Thanks for shopping with us!!!\n");
+                        exit(0);
+                        break;
+                    default:
+                        printf("Enter Right CHOICE for Functioning\n");
+                        break;
+                }
+        }
+}
+
+
+
+
